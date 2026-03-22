@@ -2,14 +2,14 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies (including Node for building frontend)
+# Install system dependencies including Node for frontend build
 RUN apt-get update && apt-get install -y \
     build-essential \
     nodejs \
     npm \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python requirements and install
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
@@ -18,16 +18,18 @@ RUN pip install --upgrade pip setuptools wheel && \
 COPY frontend ./frontend
 RUN cd frontend && npm ci && npm run build
 
-# Copy backend and project root files (manage.py, etc.)
+# Copy backend and project root files
 COPY backend ./backend
 COPY manage.py .
-COPY railpack.toml . || true
+
+# Conditionally copy railpack.toml if it exists
+RUN if [ -f railpack.toml ]; then cp railpack.toml .; else echo "railpack.toml not found, skipping"; fi
 
 # Ensure backend static dir exists and copy frontend build into it
 RUN mkdir -p backend/static
 RUN cp -r frontend/dist/* backend/static/ || true
 
-# Collect static files into STATIC_ROOT
+# Set Django settings module and collect static files
 ENV DJANGO_SETTINGS_MODULE=backend.settings
 RUN python manage.py collectstatic --noinput
 
