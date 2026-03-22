@@ -2,9 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (Python + Node.js for React build)
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    build-essential nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and install Python dependencies
@@ -12,8 +12,15 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
-# Copy application code
-COPY . .
+# Build React frontend
+COPY frontend ./frontend
+RUN cd frontend && npm install && npm run build
+
+# Copy backend code
+COPY backend ./backend
+
+# Move React build into Django static files
+RUN cp -r frontend/build/* backend/static/
 
 EXPOSE 8000
 
