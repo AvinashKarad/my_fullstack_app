@@ -20,7 +20,10 @@ RUN cd frontend && npm install && npm run build
 COPY backend ./backend
 
 # Move React build into Django static files
-RUN cp -r frontend/build/* backend/static/
+RUN mkdir -p backend/static
+RUN cp -r frontend/dist/* backend/static/
+
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
