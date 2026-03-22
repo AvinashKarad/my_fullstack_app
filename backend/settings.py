@@ -28,7 +28,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-_39#qsetce&%s96v!5r&kf!j(p
 
 # Use environment variables
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1', 'myfullstackapp-production.up.railway.app',
+    'app.vishwaindustries.in',).split(',')
 
 # Application definition
 
@@ -146,6 +147,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CORS configuration
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 # REST Framework configuration
 REST_FRAMEWORK = {
