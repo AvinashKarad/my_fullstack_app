@@ -28,8 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-_39#qsetce&%s96v!5r&kf!j(p
 
 # Use environment variables
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1', 'myfullstackapp-production.up.railway.app',
-    'app.vishwaindustries.in',).split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,myfullstackapp-production.up.railway.app,app.vishwaindustries.in').split(',')
 
 # Application definition
 
