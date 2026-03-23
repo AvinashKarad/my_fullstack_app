@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/api/students/';
+const API_URL = '/api/students/';
 
 export const createStudent = (student) => axios.post(`${API_URL}create/`, student);
 export const listStudents = () => axios.get(API_URL);
