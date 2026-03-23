@@ -39,4 +39,4 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["./entrypoint.sh"]
+CMD ["sh", "-c", "echo '=== Starting ===' && echo DATABASE_URL=$DATABASE_URL | cut -c1-30 && python manage.py migrate --noinput 2>&1 && echo '=== Migrations done ===' && exec gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"]
