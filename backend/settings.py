@@ -80,11 +80,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Database configuration for Railway and Local Development
-if os.getenv('DATABASE_URL'):
+DATABASE_URL = os.getenv('DATABASE_URL') or os.getenv('MYSQL_URL')
+if DATABASE_URL:
     # Railway or other deployment with DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.getenv('DATABASE_URL'),
+            default=DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
         )
