@@ -21,6 +21,7 @@ RUN cd frontend && npm ci && npm run build
 # Copy backend and project root files
 COPY backend ./backend
 COPY manage.py .
+COPY entrypoint.sh .
 
 # Conditionally copy railpack.toml if it exists
 RUN if [ -f railpack.toml ]; then cp railpack.toml .; else echo "railpack.toml not found, skipping"; fi
@@ -34,6 +35,8 @@ ENV DJANGO_SETTINGS_MODULE=backend.settings
 
 RUN python manage.py collectstatic --noinput
 
+RUN chmod +x entrypoint.sh
+
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["./entrypoint.sh"]
