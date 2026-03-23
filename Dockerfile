@@ -31,8 +31,9 @@ RUN cp -r frontend/dist/* backend/static/ || true
 
 # Set Django settings module and collect static files
 ENV DJANGO_SETTINGS_MODULE=backend.settings
+
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"]
